@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+{% if product %}
+<div class="product_details row">
+
+    <div class="image_panel col-12 col-md-8 text-center">
+        <img src="{{ product.get_thumbnail }}" alt="{{product.name}}">
+    </div>
+    <div class="context_panel col-12 col-md-4 ">
+        <div class="name_panel text-md-left text-center">
+            <h3>{{product.name}}</h3>
+        </div>
+        <div class="price_panel text-left">
+            <h2>₱{{product.price}}</h2>
+        </div>
+        <div class="category_panel text-left">
+            Category : {{product.category}}
+        </div>
+        <div class="quantity text-left">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <button class="btn btn-outline-secondary" type="button" id="button-addon1">-</button>
+                </div>
+                <input type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon1">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endif %}
+{% endblock%}

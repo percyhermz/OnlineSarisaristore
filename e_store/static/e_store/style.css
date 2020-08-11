@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.item-card {
+    display: inline-block;
+    background-color: whitesmoke;
+}
+.item-card-image img {
+  display: block;
+  height: 200px ; 
+  width:  200px ;
+}
+
+.item-card:hover {  
+  box-shadow: 3px 5px 5px #888;
+}
+.item-title {
+  font-size:  18px;
+  color: black;
+  width:  200px;
+}
+
+a {
+  text-decoration: none !important;
+}
+ul {
+  list-style-type: none;
+}
+.input-size-md {
+  width: 100%; 
+  
+}
+
+@media only screen and (min-width: 768px) {
+  .input-size-md {
+    width: 50%;
+  }
+  
+}
+
+
+
+
+
+
+
