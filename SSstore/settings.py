@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'e_store.apps.EStoreConfig'
+    'e_store.apps.EStoreConfig',
+    'accounts.apps.AccountsConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -52,6 +54,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'SSstore.urls'
+
+AUTH_USER_MODEL = 'accounts.User'
+
 
 TEMPLATES = [
     {

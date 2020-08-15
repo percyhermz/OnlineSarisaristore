@@ -1,36 +1,76 @@
-{% extends "base.html" %}
+{% extends "e_store/base.html" %}
 
 {% load static %}
 
+{% block nav %}
+<header class="mb-2">
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary text-center">
+      <a class="navbar-brand text-light" href="#">Online Sari-sari store</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menunavbar" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+    
+      <div class="collapse navbar-collapse text-center" id="menunavbar">
+        <form class="form-inline ml-auto my-2 my-lg-0 input-group input-size-md">
+          <input class="form-control input-size-corner-round" type="search" placeholder="Search">
+          <div class="input-group-append">
+            <button class="btn btn-light text-primary input-size-corner-round" type="submit">Go</button>
+          </div>
+        </form>
+
+        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+          <li class="nav-item">
+            <a class="nav-link menu-link text-light" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link menu-link text-light" href="#">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link menu-link text-light" href="#">Delivery</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+</header>
+
+{% endblock%}
+
 {% block content %}
 {% if product %}
-<div class="product_details row">
+<div class="product_details row m-0">
 
-    <div class="image_panel col-12 col-md-8 text-center">
-        <img src="{{ product.get_thumbnail }}" alt="{{product.name}}">
+    <div class="image_panel col-12 col-md-8">
+      <div class="item-card-image image-detail text-center border border-primary">
+        <img src="{{ product.get_thumbnail }}" alt="{{product.name}}" class="mx-auto" >
+      </div>
     </div>
-    <div class="context_panel col-12 col-md-4 ">
-        <div class="name_panel text-md-left text-center">
-            <h3>{{product.name}}</h3>
+    <div class="context_panel col-12 col-md-4">
+        <div class="name_panel text-md-left  text-center my-2 ">
+            <h3 class="font-weight-bold text-primary" >{{product.name}}</h5>
         </div>
-        <div class="price_panel text-left">
-            <h2>₱{{product.price}}</h2>
+        <div class="price_panel text-left my-2">
+            ₱{{product.price}}
         </div>
-        <div class="category_panel text-left">
+        <div class="category_panel text-left my-2">
             Category : {{product.category}}
         </div>
-        <div class="quantity text-left">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <button class="btn btn-outline-secondary" type="button" id="button-addon1">-</button>
-                </div>
-                <input type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon1">+</button>
-                </div>
+        <div class="quantity text-left my-2">
+            <button class="btn btn-primary"> 
+              -
+            </button>
+            <span class="p-3">1</span>
+            <button class="btn btn-primary"> 
+              +
+            </button>
+            </div>
+            <div class="link_panel">
+              <button class="btn btn-primary btn-block font-weight-bold">Add to cart</button>
             </div>
         </div>
+        
     </div>
+    
 
 </div>
 {% endif %}

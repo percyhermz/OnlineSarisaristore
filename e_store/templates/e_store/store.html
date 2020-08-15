@@ -1,23 +1,29 @@
-{% extends 'base.html' %} 
+{% extends 'e_store/base.html' %} 
 
 {% load static %} 
 
 {% block nav%}
 <header class="mb-2">
-    <nav class="navbar navbar-expand-lg navbar-light bg-danger text-center">
-      <a class="navbar-brand text-light" href="#">Online Sari-sari store</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary text-center">
+      
+      <a class="navbar-brand text-light" href="#">Online store</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menunavbar" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       
-    
+        
       <div class="collapse navbar-collapse text-center" id="menunavbar">
-        <form class="form-inline ml-auto my-2 my-lg-0 input-group input-size-md">
-          <input class="form-control input-size-corner-round" type="search" placeholder="Search">
+        
+        <form class="form-inline ml-auto my-2 my-lg-0 input-group input-size-md d-none d-md-flex">
+          <input class="form-control input-corners" type="search" placeholder="Search">
           <div class="input-group-append">
-            <button class="btn btn-light text-danger input-size-corner-round" type="submit">Go</button>
+            <button class="btn btn-light text-primary  btn-corners" type="submit">Go</button>
           </div>
         </form>
+      <a class="openbtn my-sm-0 my-2 ml-2 d-none d-md-block" href="">
+        <img class="cart-icon" src="{% static 'e_store/img/cart.png' %}"> 
+        <span class='in-cart'></span>
+      </a>
 
         <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
           <li class="nav-item">
@@ -27,7 +33,7 @@
             <a class="nav-link menu-link text-light" href="#">Products</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link menu-link text-light" href="#">Delivery</a>
+            <a class="nav-link menu-link text-light" href="#">Login</a>
           </li>
         </ul>
         
@@ -37,20 +43,32 @@
         
       </div>
       
+      
     </nav>
 
     <h1 class="jumbotron text-center">
         Online Shop
     </h1>
+    
 </header>
+
 {% endblock %}
 
 {% block content %}
 <div class="contents row m-0">
-    <div class="category-panel col-12 col-md-3 ">
+    <div class="category-panel col-12 col-md-2 ">
+      <button class="btn btn-primary btn-block mobile-add-btn d-md-none" >
+        <i class="fa fa-shopping-cart" style="font-size:48px;color:white"></i><span class="cart-total"></span>
+      </button>
+      <form class="form-inline ml-auto my-2 my-lg-0 input-group input-size-md  d-md-none">
+        <input class="form-control border-primary input-corners" type="search" placeholder="Search">
+        <div class="input-group-append">
+          <button class="btn btn-primary btn-corners" type="submit">Go</button>
+        </div>
+      </form>
         <div class="collapse-control">
         <h5 class="text-left">
-        <a class="text-danger  text-weight-bold" data-toggle="collapse" href="#categories" role="button" aria-expanded="false" aria-controls="collapseExample">
+        <a class="text-primary  text-weight-bold" data-toggle="collapse" href="#categories" role="button" aria-expanded="false" aria-controls="collapseExample">
             Show Categories
         </a>
         </h5>
@@ -62,19 +80,19 @@
                 Categories:
             </h4>
             <ul class="prod_types">
-                <li><a href="#" class="text-light bg-danger px-1">All Products</a></li>    
-                <li><a href="#" class="text-danger"><strong>> </strong>Dairy - Milk and Eggs</a></li>    
-                <li><a href="#" class="text-danger"><strong>> </strong>Canned & Packaged Goods</a></li>    
-                <li><a href="#" class="text-danger"><strong>> </strong>Soups, Noodles & Pasta</a></li>    
-                <li><a href="#" class="text-danger"><strong>> </strong>Snacks</a></li>    
-                <li><a href="#" class="text-danger"><strong>> </strong>Chocolates & Candies</a></li>    
-                <li><a href="#" class="text-danger"><strong>> </strong>Beverages</a></li>    
-                <li><a href="#" class="text-danger"><strong>> </strong>Cooking Items & Condiments</a></li>    
+                <li><a href="#" class="text-light bg-primary px-1">All Products</a></li>    
+                <li><a href="#" class="text-primary"><strong>> </strong>Dairy - Milk and Eggs</a></li>    
+                <li><a href="#" class="text-primary"><strong>> </strong>Canned & Packaged Goods</a></li>    
+                <li><a href="#" class="text-primary"><strong>> </strong>Soups, Noodles & Pasta</a></li>    
+                <li><a href="#" class="text-primary"><strong>> </strong>Snacks</a></li>    
+                <li><a href="#" class="text-primary"><strong>> </strong>Chocolates & Candies</a></li>    
+                <li><a href="#" class="text-primary"><strong>> </strong>Beverages</a></li>    
+                <li><a href="#" class="text-primary"><strong>> </strong>Cooking Items & Condiments</a></li>    
             </ul>
         </div>
         <div class="collapse-control">
           <h5 class="text-left">
-          <a class="text-danger  text-weight-bold" data-toggle="collapse" href="#OrderBy" role="button" aria-expanded="false" aria-controls="collapseExample">
+          <a class="text-primary  text-weight-bold" data-toggle="collapse" href="#OrderBy" role="button" aria-expanded="false" aria-controls="collapseExample">
               Show Order
           </a>
           </h5>
@@ -84,50 +102,20 @@
               Order by:
           </h4>
           <ul class="prod_types">
-              <li><a href="#" class="text-danger"><strong>> </strong>Price: Highest to Lowest</a></li>    
-              <li><a href="#" class="text-danger"><strong>> </strong>Price: Lowest to Highest</a></li>    
-              <li><a href="#" class="text-danger"><strong>> </strong>Alphabetical: A to Z</a></li>    
-              <li><a href="#" class="text-danger"><strong>> </strong>Alphabetical: Z to A</a></li>    
+              <li><a href="#" class="text-primary"><strong>> </strong>Price: Highest to Lowest</a></li>    
+              <li><a href="#" class="text-primary"><strong>> </strong>Price: Lowest to Highest</a></li>    
+              <li><a href="#" class="text-primary"><strong>> </strong>Alphabetical: A to Z</a></li>    
+              <li><a href="#" class="text-primary"><strong>> </strong>Alphabetical: Z to A</a></li>    
           </ul>
       </div>  
     
     </div>
-<div class="product-panel col-12 col-md-9">
-  <div class="row justify-content-between m-2">
-  {% for i in multiplier %}
-
-    <div class="col-12 col-md-6 col-xl-4 text-center">
-    <div class="item-card my-1 ">
-      <a href="" class='text-dark'>
-        <div class="item-card-image">
-          <img
-            src="{% static 'e_store/img/sampleprod.jpg' %}"
-            alt="We Bare Bears Plush Stuffed Toys Collection"
-          />
-        </div>
-        <div class="item-card-context text-left">
-          <div class="item-title">
-            <div class="item-title-span text-truncate">
-              We Bare Bears Plush Stuffed Toys Collection (Grizzly Bear, Panda
-              Bear, Ice Bear)
-            </div>
-          </div>
-          <div class="item-price ">
-            <div class="item-price-current">
-              <span class="item-price-currency">₱ </span>
-              <span class="item-price-number">500 </span>
-            </div>
-          </div>
-        </div>
-      </a>
-    </div>
-    </div>
-
-  {% endfor %}
+<div class="product-panel m-0 col-12 col-md-10">
+  <div class="row justify-content-between ">
+  
   {% for i in obj %}
-  <div class="col-12 col-md-6 col-xl-4 text-center">
-    <div class="item-card my-1 ">
-      <a href="{{ i.get_detail_url }}" class='text-dark'>
+  <div class="col-12 col-md-6 col-xl-4 text-center my-3">
+    <div class="item-card my-1" >
         <div class="item-card-image">
           <img
             src="{{ i.get_thumbnail }}"
@@ -135,25 +123,79 @@
           />
         </div>
         <div class="item-card-context text-left">
-          <div class="item-title">
-            <div class="item-title-span text-truncate">
+            <div class="item-title-span">
               {{ i.name }}
             </div>
-          </div>
-          <div class="item-price ">
-            <div class="item-price-current">
+          <div class="item-price my-2">
+            
               <span class="item-price-currency">₱ </span>
               <span class="item-price-number">{{ i.price }} </span>
-            </div>
+            
           </div>
+          <div class="item-links row">
+            <div class="add-to-cart-link text-center col-6">
+            <h5>
+          <a class="add-to-cart text-primary ml-auto" href="#"  data-product-code="{{ i.code }}">
+            Add to cart
+          </a>
+        </h5>
         </div>
-      </a>
+        <div class="detail-link text-center col-6">
+          <h5>
+          <a href="{{ i.get_detail_url }}" class="text-primary ml-auto">
+            View
+          </a>
+        </h5>
+        </div>
+        </div>
+        </div>
+      
     </div>
     </div>
   {% endfor %}
   </div> 
 </div>
-
-
 </div>
+
+{% endblock %}
+
+{% block cart_panel %}
+<div id="mySidepanel" class="sidepanel">
+  <a href="#" class="closebtn">x</a>
+  <div class='cart-container'>
+    <div class="row" id="update-panel">
+      <div class="col-6">
+        <img src="{% static 'e_store/img/sampleprod.jpg' %}" alt="sample" width="150px">
+      </div>
+      <div class="col-6">
+        <div class="col-12">
+          Product name
+        </div>
+      <div class="col-12 justify-content-between">
+        <div class="d-block">Quantity:</div> 
+        <div class="d-block">
+        <button class="btn btn-primary">-</button><span class="mx-3">1</span><button class="btn btn-primary">+</button>
+        </div>
+      </div>
+        <div class="d-block">
+          <span>Total Price:</span> <span>300</span>
+        </div>
+      </div>
+    </div>
+    <hr/>
+
+      <div class=" d-flex justify-content-between my-2">
+        <span class="text-left font-weight-bold">Cart Sub-Total: </span>
+        <span class="text-right font-weight-bold">₱ 0.00</span>
+      </div>
+      
+        
+    <div class="d-block text-right">
+      <button class="view-cart btn btn-primary ">View Cart</button>
+      <button class="submit-cart btn btn-primary ml-2">Checkout</button>
+    </div>
+  </div>
+  
+</div>
+
 {% endblock %}

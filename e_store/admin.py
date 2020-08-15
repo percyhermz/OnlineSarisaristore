@@ -9,7 +9,6 @@ class ImageInline(admin.TabularInline):
     model = Images
 
 class ProductAdmin(admin.ModelAdmin):
-    model = Product
     inlines = [
         ImageInline,
     ]
