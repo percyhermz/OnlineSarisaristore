@@ -1,5 +1,5 @@
 $(document).ready(function(){
-   alert('This is to check if js is working');
+//    alert('This is to check if js is working');
    var x = window.matchMedia("(max-width: 700px)");
 
     
@@ -52,14 +52,17 @@ $(document).ready(function(){
 
     function set_cart_pop(){
         let basket = JSON.parse(localStorage.getItem('basket'));
-
         pop = 0;
-        for (const items in basket.items) {
-            pop += basket.items[items].quantity
-        };
-
-        $('.in-cart').text(pop);
-        $('.in-cart').css('display', 'inline-block');
+        if (basket) {
+            for (const items in basket.items) {
+                pop += basket.items[items].quantity
+            };
+            $('.in-cart').text(pop);
+            $('.in-cart').css('display', 'inline-block');
+        }
+        else {
+            $('.in-cart').css('display', 'none');
+        }
     }
 
     $('.add-to-cart').on('click', function(e){
@@ -67,17 +70,17 @@ $(document).ready(function(){
         e.preventDefault();
         console.log('Retrieve data-product-code to send to Django server');
         product_code = e.target.dataset.productCode;
-        let items = Object.keys(basket.items);
+        items = basket.items;
         name = ""
-        basket_codes = [];
-        for (x in items) {
-            basket_codes.push(basket.items[x].code);
+        for (const x in items) {
             if (basket.items[x].code == product_code) {
-                name = x
+                name=basket.items[x].name;
             }
+
         }
-        if (basket_codes.includes(product_code)) {
-            add_same_item(name)
+
+        if (name) {
+            add_same_item(name);
         }
         else {
             $.ajax({
@@ -95,6 +98,7 @@ $(document).ready(function(){
                 }
             });
         }
+    
         
         
     });
@@ -135,30 +139,37 @@ $(document).ready(function(){
         $('#update-panel').empty();
         let basket = JSON.parse(localStorage.getItem('basket'));
         let products_basket = basket.items;
+        let cart_sub = 0
         
         for (const items in products_basket) {
-            let html =  "<div class='col-12'>" +
-                            "<div class='col-6'>" +
-                                "<img src=" + basket.items[items].images[0].image +">" +
+            let html =  "<div class='col-12 my-2'>" +
+                        "<div class='row'> "+
+                            "<div class='col-6 align-items-center justify-content-center border border-primary '>" +
+                                "<div class='' ><img class='m-auto border border-danger' src=" + basket.items[items].images[0].image +"> </div>" +
                             "</div>" +
-                        "<div class='col-6'> " +
-                            "<div class='col-12'> " + basket.items[items].name + " </div> " +
-                                "<div class='col-12 justify-content-between'> " + 
-                                    "<div class=''>Quantity:</div>" + 
-                                    "<div class=''> " + 
-                                        "<button class='btn btn-primary'>-</button>" + 
-                                        "<span class='mx-3'>"+basket.items[items].quantity+"</span>" + 
-                                        "<button class='btn btn-primary'>+</button>" +
+                            "<div class='col-6'> " +
+                                "<div class='col-12'> " + basket.items[items].name + " </div> " +
+                                    "<div class='col-12 justify-content-between'> " + 
+                                        "<div class=''>Quantity:</div>" + 
+                                        "<div class='d-block'> " + 
+                                            "<button class='btn btn-primary btn-minus' data-name='" + 
+                                            basket.items[items].name+ "'>-</button>" + 
+                                            "<span class='mx-3'>"+basket.items[items].quantity+"</span>" + 
+                                            "<button class='btn btn-primary btn-plus' data-name='"
+                                            +basket.items[items].name + "'>+</button>" +
+                                        "</div>" + 
                                     "</div>" + 
-                                "</div>" + 
-                                "<div class=''>" + 
-                                    "<span>Total Price:</span>" + 
-                                    "<span>" + basket.items[items].total_price + "</span>" +
+                                    "<div class=''>" + 
+                                        "<span>Total Price:</span>" + 
+                                        "<span>" + basket.items[items].total_price + "</span>" +
                                 "</div>" +
                             "</div>" +
+                        "</div>"+
                         "</div>";
             $('#update-panel').append(html);
+            cart_sub += basket.items[items].total_price;
         };
+        $('.cart-sub-total').text(cart_sub);
     }
     
     function add_same_item(name) {
@@ -174,6 +185,9 @@ $(document).ready(function(){
             set_cart_pop()
             updateCartPanel();
     }
+
+    
+
 });
 
 

@@ -1,0 +1,13 @@
+{% extends 'e_store/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="col-6 m-auto">
+    <h2>Register</h2>
+    <form action="{%url 'accounts:register_account' %}" method="post">
+        {% csrf_token %}
+        {{ form_set|crispy }}       
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+{% endblock %}

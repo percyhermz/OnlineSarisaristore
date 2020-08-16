@@ -1,0 +1,18 @@
+{% extends 'e_store/base.html' %}
+
+{% block content %}
+
+<div class="d-block text-center">
+    <h2 class="m-auto">
+        You are logging out
+    </h2>
+    <h2 id='check'>
+
+    </h2>
+</div>
+<script type="text/javascript">
+var delay = 4000; 
+setTimeout(function(){ window.location = "{% url 'store:store_view' %}"; }, delay);
+</script>
+{% endblock %}
+

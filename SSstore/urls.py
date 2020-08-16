@@ -25,5 +25,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', RedirectView.as_view(url='/store/')),
     path('admin/', admin.site.urls),
-    path('store/', include('e_store.urls'))
+    path('store/', include('e_store.urls', namespace='store')),
+    path('accounts/', include('accounts.urls', namespace='accounts'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

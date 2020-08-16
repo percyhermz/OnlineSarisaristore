@@ -32,9 +32,15 @@
           <li class="nav-item">
             <a class="nav-link menu-link text-light" href="#">Products</a>
           </li>
+          {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link menu-link text-light" href="#">Login</a>
+            <a class="nav-link menu-link text-light" href="{% url 'accounts:logout' %}">Logout</a>
           </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link menu-link text-light" href="{% url 'accounts:login' %}">Login</a>
+          </li>
+          {% endif%}
         </ul>
         
         
@@ -164,29 +170,16 @@
   <a href="#" class="closebtn">x</a>
   <div class='cart-container'>
     <div class="row" id="update-panel">
-      <div class="col-6">
-        <img src="{% static 'e_store/img/sampleprod.jpg' %}" alt="sample" width="150px">
-      </div>
-      <div class="col-6">
-        <div class="col-12">
-          Product name
-        </div>
-      <div class="col-12 justify-content-between">
-        <div class="d-block">Quantity:</div> 
-        <div class="d-block">
-        <button class="btn btn-primary">-</button><span class="mx-3">1</span><button class="btn btn-primary">+</button>
-        </div>
-      </div>
-        <div class="d-block">
-          <span>Total Price:</span> <span>300</span>
-        </div>
-      </div>
+      
     </div>
     <hr/>
 
       <div class=" d-flex justify-content-between my-2">
-        <span class="text-left font-weight-bold">Cart Sub-Total: </span>
-        <span class="text-right font-weight-bold">₱ 0.00</span>
+        <div class="text-left font-weight-bold">Cart Sub-Total: </div>
+        <div class="text-right font-weight-bold">
+          <span class="currency">₱</span>
+          <span class="cart-sub-total">0.00</span>
+        </div>
       </div>
       
         

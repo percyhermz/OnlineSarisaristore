@@ -3,7 +3,6 @@ from rest_framework import status
 from .models import Product
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.renderers import JSONRenderer
 from .api.serializers import ProductSerializer 
 # Create your views here.
 
@@ -13,7 +12,6 @@ def store_view(request):
         'multiplier' : range(12),
         'obj' : obj,
     }
-
     return render(request, 'e_store/store.html', context)
 
 def product_detail_view(request, code):

@@ -24,7 +24,7 @@ class Product(models.Model):
         return self.id
 
     def get_detail_url(self):
-        return reverse('product_detail', kwargs={'code' : self.code})
+        return reverse('store:product_detail', kwargs={'code' : self.code})
 
     def get_images(self):
         return self.images.all()

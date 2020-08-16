@@ -5,7 +5,7 @@ from .models import User
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'is_admin', 'mobile', 'email')
-    fields = ['username', 'email', 'first_name', 'last_name', 'mobile', 'is_admin']
+    fields = ['username', 'email', 'first_name', 'last_name', 'mobile', 'is_admin', 'password']
     
 
 
