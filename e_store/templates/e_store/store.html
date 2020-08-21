@@ -36,7 +36,13 @@
           <li class="nav-item">
             <a class="nav-link menu-link text-light" href="{% url 'accounts:logout' %}">Logout</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link menu-link text-light" href="{% url 'store:set_address' %}">Profile</a>
+          </li>
           {% else %}
+          <li class="nav-item">
+            <a class="nav-link menu-link text-light" href="{% url 'accounts:register_account' %}">Sign up</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link menu-link text-light" href="{% url 'accounts:login' %}">Login</a>
           </li>
@@ -55,7 +61,14 @@
     <h1 class="jumbotron text-center">
         Online Shop
     </h1>
-    
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }} h4 text-center d-block bg-success text-light"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
 </header>
 
 {% endblock %}
@@ -128,7 +141,7 @@
             alt="{{ i.name }}"
           />
         </div>
-        <div class="item-card-context text-left">
+        <div class="item-card-context text-center">
             <div class="item-title-span">
               {{ i.name }}
             </div>
@@ -183,9 +196,9 @@
       </div>
       
         
-    <div class="d-block text-right">
-      <button class="view-cart btn btn-primary ">View Cart</button>
-      <button class="submit-cart btn btn-primary ml-2">Checkout</button>
+    <div class="d-flex justify-content-between">
+      <a class="d-block text-center btn btn-small btn-primary text-light" role="button">View Cart</a>
+      <a class="d-block btn btn-primary btn-small text-center text-light"  href="{% url 'store:checkout' %}" role="button">Checkout</a>
     </div>
   </div>
   

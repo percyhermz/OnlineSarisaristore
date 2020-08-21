@@ -1,0 +1,24 @@
+{% extends 'e_store/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          <li {% if message.tags %} class="text-center h4 d-block {{ message.tags }} bg-danger text-light"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+  {% endif %}
+<div>
+    <h2 class="h2 d-block bg-primary text-light text-center">Set up your address</h2>
+  </div>
+  <div class="row m-0 p-0 justify-content-center">
+    <div class="col-12 col-md-6">
+      <form action="" method="POST">
+        {% csrf_token%}
+      {{ship_form|crispy}}
+      <button type="submit" class="btn btn-primary" >Submit Address</button>
+    </form>
+    </div>
+</div>
+
+  {% endblock %}

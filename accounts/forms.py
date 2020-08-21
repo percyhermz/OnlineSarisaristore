@@ -15,7 +15,7 @@ class RegisterForm(UserCreationForm):
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
-        fields = ['customer', 'h_b_st_number', 'st_name', 'brgy_dist_name', 'city', 'province']
+        fields = ['name', 'mobile', 'region', 'province', 'city', 'brgy_dist_name','postal_code', 'detailed_address']
 
 
 

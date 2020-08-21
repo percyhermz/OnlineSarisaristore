@@ -1,0 +1,13 @@
+asgiref==3.2.10
+Django==3.1
+django-crispy-forms==1.9.2
+djangorestframework==3.11.1
+et-xmlfile==1.0.1
+jdcal==1.4.1
+openpyxl==3.0.4
+Pillow==7.2.0
+pytz==2020.1
+sqlparse==0.3.1
+
+AIzaSyAFOEMHPJcmXtBZ39o9WwrMADfAXBX6tBM
+https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=AIzaSyAFOEMHPJcmXtBZ39o9WwrMADfAXBX6tBM

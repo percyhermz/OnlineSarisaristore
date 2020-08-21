@@ -1,0 +1,88 @@
+{% extends 'e_store/base.html' %} {% load crispy_forms_tags %} {%load static %}
+{% block content%}
+<div class="text-center">
+  <h2 class="h2 d-block bg-primary">Checkout Details</h2>
+</div>
+<div class="row col-md-6 col-lg-12">
+  <div class="cart-items-div col-md-6 col-12" id="update-panel">
+    
+  </div>
+  <div class="col-12 col-md-6">
+    {% if address %}
+    <form action="{% url 'store:checkout' %}" method="POST">
+      <div class="address-div d-flex justify-content-between">
+        <div class="col-6 text-center">
+          <span class="text-weight-bold">Address:</span>
+        </div>
+        <div class="font-weight-bold tex-center">
+          {% for i in address.get_complete_address %}{{ i }}{% endfor %}
+        </div>
+      </div>
+      <div class="name-div d-flex justify-content-between">
+        <div class="col-6 text-center">
+          <span class="text-weight-bold">Name:</span>
+        </div>
+          <div class="font-weight-bold text-center col-6 text-center">
+            {{ address.name }}
+          </div>
+      </div>
+      <div class="contact-div d-flex justify-content-between">
+        <div class="col-6 text-center">
+          <span class="text-weight-bold">Mobile:</span>
+        </div>
+          <div class="font-weight-bold text-center col-6">
+            {{ address.mobile }}
+          </div>
+      </div>
+      <div class="cart-subtotal-div d-flex justify-content-between">
+        <div class="col-6 text-center ">
+          <span class="text-weight-bold">Cart Subtotal:</span>
+          
+        </div>
+          <div class="font-weight-bold text-center col-6 ">
+            <span class="currency">₱</span>
+            <span class="cart-sub-total"></span>  
+          </div>
+      </div>
+      <div class="shippping-div d-flex justify-content-between">
+        <div class="col-6 text-center">
+          <span class="text-weight-bold ">Shipping Fee:</span>
+        </div>
+          <div class="font-weight-bold text-center col-6">
+            <span class="currency">₱</span>
+            <span class="ship_fee">{{ address.get_est_fee }}</span>
+          </div>
+      </div>
+      <div class="total-pay-div d-flex justify-content-between">
+        <div class="col-6 text-center">
+          <span class="text-weight-bold ">Total Payment:</span>
+        </div>
+          <div class="font-weight-bold text-center col-6">
+            <span class="currency">₱</span>
+            <span class="total_payment"></span>
+          </div>
+      </div>
+      <div class="cod-div d-flex justify-content-between">
+        <div class="col-6 text-center">
+          <span class="text-weight-bold">Payment:</span>
+        </div>
+        <div class="col-6 text-center">
+          <select class="form-control" id="pay-method">
+            <option value="COD">Cash on Delivery</option>
+            <option value="PayMaya">Pay via PayMaya</option>
+            <option value="Gcash">Pat via Gcash</option>
+            <option value="bank">Pay via bank</option>
+          </select>
+            </div>
+      </div>
+      <div class="button-divs row text-right">
+        <div class="col-12 my-2">
+          <button type="submit" class="place-order btn btn-danger btn-small">Place Order</button>
+        </div>
+      </div>
+      {% endif %}
+    </form>
+  </div>
+</div>
+
+{% endblock %}

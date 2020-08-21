@@ -4,6 +4,7 @@ $(document).ready(function(){
 
     
     onLoadCartIn();
+    button_events_load();
     function getValue() {
         var current_pull = parseInt($('#mySidepanel').css('transform').split(',')[4]);
         return current_pull
@@ -26,6 +27,9 @@ $(document).ready(function(){
         }
     }
     // cart panel animation
+    
+    function button_events_load() {
+
     $('.openbtn').on('click', function(e){
         e.preventDefault();
         open_panel();
@@ -42,11 +46,58 @@ $(document).ready(function(){
             'transform': 'translateX(100%)',
             '-webkit-transform': 'translateX(100%)',
             '-ms-transform': 'translateX(100%)'
-        });
-        
-            
+        });      
     });
-      
+
+
+}
+
+    function plus_minus_button_load() {
+        $('.plus').on('click', function(e){
+            e.preventDefault();
+            name = e.target.dataset.name;
+            target = Array.from(e.currentTarget.classList);
+            cart_inc_dec(name, target);
+        });
+        $('.minus').on('click', function(e){
+            e.preventDefault();
+            name = e.target.dataset.name;
+            target = Array.from(e.currentTarget.classList);
+            cart_inc_dec(name, target);
+        });
+        $('.add-to-cart').on('click', function(e){
+            let basket = JSON.parse(localStorage.getItem('basket'));
+            e.preventDefault();
+            console.log('Retrieve data-product-code to send to Django server');
+            product_code = e.target.dataset.productCode;
+            items = basket.items;
+            name = ""
+            for (const x in items) {
+                if (basket.items[x].code == product_code) {
+                    name=basket.items[x].name;
+                }
+            }
+            if (name) {
+                add_same_item(name);
+            }
+            else {
+                $.ajax({
+                    url: 'add_to_cart/',
+                    type: 'GET',
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    data: {
+                        code : product_code
+                    },
+                    success: function(response){
+                        // prod = JSON.stringify(response);
+                        // console.log(prod);
+                        setItemsBasket(response);
+                    }
+                });
+            }
+        });
+    }
     // add to cart function
     
 
@@ -65,43 +116,28 @@ $(document).ready(function(){
         }
     }
 
-    $('.add-to-cart').on('click', function(e){
-        let basket = JSON.parse(localStorage.getItem('basket'));
-        e.preventDefault();
-        console.log('Retrieve data-product-code to send to Django server');
-        product_code = e.target.dataset.productCode;
-        items = basket.items;
-        name = ""
-        for (const x in items) {
-            if (basket.items[x].code == product_code) {
-                name=basket.items[x].name;
-            }
-
-        }
-
-        if (name) {
-            add_same_item(name);
-        }
-        else {
-            $.ajax({
-                url: 'add_to_cart/',
-                type: 'GET',
-                dataType: 'json',
-                contentType: "application/json; charset=utf-8",
-                data: {
-                    code : product_code
-                },
-                success: function(response){
-                    // prod = JSON.stringify(response);
-                    // console.log(prod);
-                    setItemsBasket(response);
-                }
-            });
-        }
     
-        
-        
+
+        $('.place-order').on('click', function(e){
+            e.preventDefault();
+            let basket = JSON.parse(localStorage.getItem('basket'));
+
+                $.ajax({
+                    url: 'add_to_cart/',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    data: {
+                        products : basket.items,
+                    },
+                    success: function(response) {
+                        
+                        setTimeout(function(){ window.location = "{% url 'store:store_view' %}"; }, 3000);
+                        localStorage.clear();
+                    }
+                });
     });
+        
 
     function onLoadCartIn() {
         let basket_start = JSON.parse(localStorage.getItem('basket'));
@@ -139,37 +175,37 @@ $(document).ready(function(){
         $('#update-panel').empty();
         let basket = JSON.parse(localStorage.getItem('basket'));
         let products_basket = basket.items;
-        let cart_sub = 0
         
         for (const items in products_basket) {
-            let html =  "<div class='col-12 my-2'>" +
+            let html =  "<div class='col-12 my-2' id='"+basket.items[items].code+"'>" +
                         "<div class='row'> "+
-                            "<div class='col-6 align-items-center justify-content-center border border-primary '>" +
-                                "<div class='' ><img class='m-auto border border-danger' src=" + basket.items[items].images[0].image +"> </div>" +
+                            "<div class='col-6 text-center border border-primary d-flex align-items-center'>" +
+                                "<img class='m-auto border border-danger' src=" + basket.items[items].images[0].image +">" +
                             "</div>" +
                             "<div class='col-6'> " +
                                 "<div class='col-12'> " + basket.items[items].name + " </div> " +
-                                    "<div class='col-12 justify-content-between'> " + 
+                                    "<div class='col-12  justify-content-between'> " + 
                                         "<div class=''>Quantity:</div>" + 
-                                        "<div class='d-block'> " + 
-                                            "<button class='btn btn-primary btn-minus' data-name='" + 
-                                            basket.items[items].name+ "'>-</button>" + 
-                                            "<span class='mx-3'>"+basket.items[items].quantity+"</span>" + 
-                                            "<button class='btn btn-primary btn-plus' data-name='"
-                                            +basket.items[items].name + "'>+</button>" +
+                                        "<div class=''> " + 
+                                            "<a class=' text-light btn btn-primary minus' data-name=\"" + 
+                                            basket.items[items].name+ "\" href=''>-</a>" + 
+                                            "<span class='mx-3 cart-quantity'>"+basket.items[items].quantity+"</span>" + 
+                                            "<a class=' text-light btn btn-primary plus' data-name=\"" +
+                                            basket.items[items].name + "\" href=''>+</a>" +
                                         "</div>" + 
                                     "</div>" + 
-                                    "<div class=''>" + 
-                                        "<span>Total Price:</span>" + 
-                                        "<span>" + basket.items[items].total_price + "</span>" +
+                                    "<div class='col-12'>" + 
+                                        "<span>Total Price: </span>" +
+                                        "<span class='currency'>₱</span>" +
+                                        "<span class='item_total_price'>" + basket.items[items].total_price + "</span>" +
                                 "</div>" +
                             "</div>" +
                         "</div>"+
                         "</div>";
             $('#update-panel').append(html);
-            cart_sub += basket.items[items].total_price;
         };
-        $('.cart-sub-total').text(cart_sub);
+        sub_total_update();
+        plus_minus_button_load();
     }
     
     function add_same_item(name) {
@@ -180,14 +216,47 @@ $(document).ready(function(){
             basket.items[name].quantity += 1;
             quantity = basket.items[name].quantity;
             basket.items[name].total_price = price*quantity;
-
             localStorage.setItem('basket', JSON.stringify(basket));
-            set_cart_pop()
+            set_cart_pop();
             updateCartPanel();
     }
 
-    
+    function cart_inc_dec(name, target){
+        let basket = JSON.parse(localStorage.getItem('basket'));
+        if (target.includes('plus')){
+            basket.items[name].quantity += 1;
+        }
+        else {
+            basket.items[name].quantity -= 1;
+        }
+        price = basket.items[name].price;
+        quantity = basket.items[name].quantity;
+        basket.items[name].total_price = price*quantity;
+        localStorage.setItem('basket', JSON.stringify(basket));
+        code_id = '#' + basket.items[name].code;
+        div_quantity = code_id + ' .cart-quantity';
+        div_t_price = code_id + ' .item_total_price';
+        $(div_quantity).text(quantity);
+        $(div_t_price).text(basket.items[name].total_price);
+        sub_total_update();
+        set_cart_pop();
+    }
 
+    function sub_total_update() {
+        let basket = JSON.parse(localStorage.getItem('basket'));
+        let products_basket = basket.items;
+        let cart_sub = 0;
+        let ship_pay = parseInt($('.ship_fee').text());
+
+        for (const items in products_basket) {
+            cart_sub += basket.items[items].total_price;
+        }
+        let total_pay = cart_sub + ship_pay;
+        $('.cart-sub-total').data('sub_total', cart_sub);
+        $('.cart-sub-total').text(cart_sub);
+        $('.total_payment').data('total_pay', total_pay);
+        $('.total_payment').text(total_pay);
+    }
 });
 
 

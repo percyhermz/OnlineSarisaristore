@@ -44,6 +44,8 @@ class Order(models.Model):
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=100, null=True)
+    ship_address = models.CharField(max_length=100)
+
 
     def __str__(self):
         return str(self.id)
@@ -69,13 +71,57 @@ class Order(models.Model):
         total = sum([item.quantity for item in orderitems])
         return total
 
-
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.BigIntegerField(default=1)
+    
 
 class Address(models.Model):
-    customer = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
-    h_b_st_number = models.CharField(max_length=20, verbose_name="House/Building/Street Number")
-    st_name = models.CharField(max_length=20, verbose_name="Street Name")
-    brgy_dist_name = models.CharField(max_length=20, verbose_name="Barangay/District Name")
-    city = models.CharField(max_length=20, verbose_name="City/Municipality")
+    customer = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='addresses')
+    detailed_address = models.CharField(max_length=20, verbose_name="Detailed Address: House#/Buildingname/Street", default="address")
+    brgy_dist_name = models.CharField(max_length=20, verbose_name="Barangay")
+    city = models.CharField(max_length=20, verbose_name="City")
+    region = models.CharField(max_length=20, verbose_name="Region", default="address")
     province = models.CharField(max_length=20, verbose_name="Province")
+    postal_code = models.CharField(max_length=20, verbose_name="Postal Code", default="postal_code here")
+    name = models.CharField(max_length=20, verbose_name="Name", default="Please put your name")
+    mobile = models.CharField(max_length=20, verbose_name="Mobile #", default="Please update your number")
+    distance_to_store = models.IntegerField(default=0, verbose_name="Shipping Distance(km)")
+    current = models.BooleanField(default=True)
+
+    @property
+    def get_est_fee(self):
+        fee_per_km = 8
+        initial_fee = 60
+        additional_fee = initial_fee + int(round(self.distance_to_store))*fee_per_km
+        default = 200
+        return default
+
+    @property
+    def get_complete_address(self):
+        address1 =  self.detailed_address + " " + self.brgy_dist_name
+        address2 =  self.region + "~" + self.province
+        address3 =  self.city + " " + self.postal_code
+        address = address1 + " " + address2+ " " + address3
+        return address
+
+    @property
+    def get_mobile(self):
+        return self.mobile
+
+    @property
+    def get_name(self):
+        return self.name
+
+    def __str__(self):
+        return "Owner: " + self.customer + "Address: " + str(self.get_complete_address)
+
+
+    
+
+    
+
+
+
 

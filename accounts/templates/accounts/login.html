@@ -3,32 +3,25 @@
 
 
 {% block content %}
+{% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          <li {% if message.tags %} class="{{ message.tags }} h4 text-center d-block bg-danger text-light"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+{% endif %}
 <div class="row justify-content-center">
   <div class="d-block border border-primary rounded-corner col-4 m-0 p-0">
     <h2 class="bg-primary text-light text-center d-block">
       Login
     </h2>
+    {% if message %}
+    <div class="h2 text-danger text-center">{{message}}</div>
+    {% endif %}
     <div class="p-3">
       <form action="{% url 'accounts:login' %}" method="POST">
         {% csrf_token %} 
-        {{ form|crispy }} 
-        <!-- {% if form.errors %} 
-
-            {% for field in form %} 
-                {% for error in field.errors %}
-                    <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                    </div>
-                {% endfor %}
-            {% endfor %}
-
-            {% for error in form.non_field_errors %}
-                <div class="alert alert-danger">
-                <strong>{{ error|escape }}</strong>
-                </div>
-            {% endfor %}
-
-        {% endif %} -->
+        {{ form|crispy }}
         <button type="submit" class="btn btn-primary">Login</button>
       </form>
     </div>

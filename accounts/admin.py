@@ -1,13 +1,24 @@
 from django.contrib import admin
-from .models import User
+from accounts.models import User
+from e_store.models import Address
 # Register your models here.
+
+class AddressInline(admin.StackedInline):
+        model = Address
+        extra = 0
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'is_admin', 'mobile', 'email')
-    fields = ['username', 'email', 'first_name', 'last_name', 'mobile', 'is_admin', 'password']
-    
+        model = User
+        inlines = [
+            AddressInline,
+        ]
+        fields = ['username', 'email', 'first_name', 'last_name', 'mobile', 'is_admin', 'password']
+
+class AddressAdmin(admin.ModelAdmin):
+    class Meta:
+        model = Address
+        fields = ['detailed_address', 'mobile', 'name']
 
 
 admin.site.register(User, UserAdmin)
-

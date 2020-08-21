@@ -11,9 +11,8 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'e_store/style.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-
-
-
+    {% block specific_scripts %}
+    {% endblock %}
 
     <title>Online Shop for your business</title>
   </head>
@@ -55,22 +54,20 @@
           <li class="nav-item">
             <a class="nav-link menu-link text-light" href="{% url 'accounts:logout' %}">Logout</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link menu-link text-light" href="{% url 'store:set_address' %}">Profile</a>
+          </li>
           {% else %}
+          <li class="nav-item">
+            <a class="nav-link menu-link text-light" href="{% url 'accounts:register_account' %}">Sign up</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link menu-link text-light" href="{% url 'accounts:login' %}">Login</a>
           </li>
           {% endif%}
           </ul>
-          
-          
-            
-          
-          
         </div>
-        
-        
       </nav>
-  
       <h1 class="jumbotron text-center">
           Online Shop
       </h1>
