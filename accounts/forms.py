@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate
 from django import forms
 from accounts.models import User
-from e_store.models import Address
+from e_store.models import Address, Order, OrderItem
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(max_length=30, help_text="Required: Add a valid email address")
@@ -32,5 +32,15 @@ class LoginUserForm(forms.ModelForm):
         if not authenticate(email=email, password=password):
             raise forms.ValidationError("Invalid Login")
 
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['name', 'mobile', 'ship_address', 'transaction_id', 'payment_type']
+
+class OrderItemForm(forms.ModelForm):
+    class Meta:
+        model = OrderItem
+        fields = ['quantity','total_price','product']
 
     

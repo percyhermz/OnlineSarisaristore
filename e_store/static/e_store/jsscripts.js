@@ -2,7 +2,6 @@ $(document).ready(function(){
 //    alert('This is to check if js is working');
    var x = window.matchMedia("(max-width: 700px)");
 
-    
     onLoadCartIn();
     button_events_load();
     function getValue() {
@@ -65,38 +64,7 @@ $(document).ready(function(){
             target = Array.from(e.currentTarget.classList);
             cart_inc_dec(name, target);
         });
-        $('.add-to-cart').on('click', function(e){
-            let basket = JSON.parse(localStorage.getItem('basket'));
-            e.preventDefault();
-            console.log('Retrieve data-product-code to send to Django server');
-            product_code = e.target.dataset.productCode;
-            items = basket.items;
-            name = ""
-            for (const x in items) {
-                if (basket.items[x].code == product_code) {
-                    name=basket.items[x].name;
-                }
-            }
-            if (name) {
-                add_same_item(name);
-            }
-            else {
-                $.ajax({
-                    url: 'add_to_cart/',
-                    type: 'GET',
-                    dataType: 'json',
-                    contentType: "application/json; charset=utf-8",
-                    data: {
-                        code : product_code
-                    },
-                    success: function(response){
-                        // prod = JSON.stringify(response);
-                        // console.log(prod);
-                        setItemsBasket(response);
-                    }
-                });
-            }
-        });
+        
     }
     // add to cart function
     
@@ -116,58 +84,94 @@ $(document).ready(function(){
         }
     }
 
-    
+    $('.add-to-cart').on('click', function(e){
+        e.preventDefault();
+        let basket = JSON.parse(localStorage.getItem('basket'));
+        console.log('Retrieve data-product-code to send to Django server');
+        product_code = e.target.dataset.productCode;
+        items = basket.items;
+        name = ""
+        for (const x in items) {
+            if (basket.items[x].code == product_code) {
+                name = basket.items[x].name;
+                console.log(name);
+            }
+        }
+
+        if (name) {
+            add_same_item(name);
+        }
+        else {
+            $.ajax({
+                url: 'add_to_cart/',
+                method: 'GET',
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                data: {code : product_code},
+                success: function(response){
+                    console.log('ajax GET request success');
+                    setItemsBasket(response);
+                },
+                error: function(response){
+                    console.log(response);
+                }
+            });
+        }
+    });
 
         $('.place-order').on('click', function(e){
             e.preventDefault();
+            const csrftoken = getCookie('csrftoken');
             let basket = JSON.parse(localStorage.getItem('basket'));
-
+            let payment = $('#pay-method option:selected').val();
                 $.ajax({
-                    url: 'add_to_cart/',
-                    type: 'POST',
+                    url: 'placeorder/',
+                    headers: {'X-CSRFToken': csrftoken},
+                    method: 'POST',
                     dataType: 'json',
-                    contentType: "application/json; charset=utf-8",
-                    data: {
-                        products : basket.items,
-                    },
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify({
+                        products: basket.items,
+                        payment : payment,
+                    }),
                     success: function(response) {
-                        
-                        setTimeout(function(){ window.location = "{% url 'store:store_view' %}"; }, 3000);
+                        $('#transaction_id_ajax').text("Transaction ID: " + response.transaction_id);
+                        $('#payment_type_ajax').text("Payment Type: " + response.payment_type);
+                        $('#name_ajax').text("Receiver Name: " + response.name);
+                        $('#mobile_ajax').text("Mobile No.: " + response.mobile);
+                        $('#placeordermodal').modal('show');
                         localStorage.clear();
+                        setTimeout(function(){ window.location = "/store/"; }, 3000);
+                    },
+                    error: function(response) {
+                        console.log(response);
                     }
                 });
     });
         
-
     function onLoadCartIn() {
         let basket_start = JSON.parse(localStorage.getItem('basket'));
-
-        if (basket_start) {
+        if (basket_start && Object.keys(basket_start.items).length != 0) {
             set_cart_pop()
         } else {
             $('.in-cart').css('display', 'none');
             localStorage.setItem('basket', JSON.stringify({items: {}}));
         }
-
         updateCartPanel();
     }
 
     function setItemsBasket(product) {
         let basket = JSON.parse(localStorage.getItem('basket'));
 
-        if (basket.items[product.name]) {
-            add_same_item(product.name);
-            return;
-        } else {
-            console.log('adding a new item');
-            basket.items[product.name] = product;
-            initial_price = basket.items[product.name].price;
-            basket.items[product.name].quantity = 1;
-            basket.items[product.name].total_price = initial_price; 
-        }
+        console.log('adding a new item');
+        basket.items[product.name] = product;
+        initial_price = basket.items[product.name].price;
+        basket.items[product.name].quantity = 1;
+        basket.items[product.name].total_price = initial_price; 
+        
 
         localStorage.setItem('basket', JSON.stringify(basket));
-        set_cart_pop()
+        set_cart_pop();
         updateCartPanel();
     }
 
@@ -210,7 +214,6 @@ $(document).ready(function(){
     
     function add_same_item(name) {
             let basket = JSON.parse(localStorage.getItem('basket'));
-            product = 
             console.log('Increasing Quantity of ' + basket.items[name].name);
             price = basket.items[name].price;
             basket.items[name].quantity += 1;
@@ -254,9 +257,25 @@ $(document).ready(function(){
         let total_pay = cart_sub + ship_pay;
         $('.cart-sub-total').data('sub_total', cart_sub);
         $('.cart-sub-total').text(cart_sub);
-        $('.total_payment').data('total_pay', total_pay);
         $('.total_payment').text(total_pay);
     }
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    
 });
 
 

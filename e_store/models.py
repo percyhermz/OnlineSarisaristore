@@ -40,15 +40,26 @@ class Images(models.Model):
 
 
 class Order(models.Model):
+
+    class PayChoices(models.TextChoices):
+        COD = 'Cash on Delivery', ('Cash on Delivery')
+        PAYMAYA = 'PayMaya', ('PayMaya')
+        GCASH = 'Gcash', ('Gcash')
+        BANK = 'Bank', ('Bank')
+
+
     customer = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.CASCADE)
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=100, null=True)
-    ship_address = models.CharField(max_length=100)
-
+    ship_address = models.CharField(max_length=100, verbose_name="Delivered to", default="address") 
+    payment_type = models.CharField(max_length=20, choices=PayChoices.choices, default=PayChoices.COD,verbose_name="Payment Method")
+    name = models.CharField(max_length=40, verbose_name="Name", default='Name')
+    mobile = models.CharField(max_length=11, verbose_name="Mobile No.", default='09') 
+ 
 
     def __str__(self):
-        return str(self.id)
+        return str(self.name) + " " + self.mobile
 
     @property
     def shipping(self):
@@ -72,9 +83,14 @@ class Order(models.Model):
         return total
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.BigIntegerField(default=1)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True)
+    quantity = models.IntegerField(default=1)
+    total_price = models.IntegerField(default=0)
+
+    @property
+    def get_total(self):
+        return self.total_price
     
 
 class Address(models.Model):
@@ -115,7 +131,7 @@ class Address(models.Model):
         return self.name
 
     def __str__(self):
-        return "Owner: " + self.customer + "Address: " + str(self.get_complete_address)
+        return "Owner: " + str(self.customer) + "Address: " + str(self.get_complete_address)
 
 
     

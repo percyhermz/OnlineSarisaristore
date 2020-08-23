@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect, reverse
 from rest_framework import status
-from .models import Product, Address, Order
+from e_store.models import Product, Address, Order
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from .api.serializers import ProductSerializer
-from accounts.forms import AddressForm
+from rest_framework.decorators import api_view, parser_classes
+from rest_framework.parsers import JSONParser
+from .api.serializers import ProductSerializer, OrderSerializer
+from accounts.forms import AddressForm, OrderForm
 from django.forms import inlineformset_factory, modelformset_factory
 from accounts.models import User
 from django.contrib import messages
+from e_store.utils import pay_choice_converter, create_orderitems, create_transaction_id
 # Create your views here.
 
 def store_view(request):
@@ -28,13 +30,18 @@ def product_detail_view(request, code):
     return render(request, 'e_store/details.html', context)
 
 @api_view(['GET'])
+@parser_classes([JSONParser])
 def cart_ajax_handler(request):
     if request.method == 'GET':
-        prod_code = request.GET.get('code')
+        print(request.query_params)
+        prod_code = request.query_params.get('code')
+        if prod_code == None:
+            raise Exception('prod_code is None')
+        print(prod_code)
         try:
             obj = Product.objects.get(code=prod_code)
         except Product.DoesNotExist:
-            return Response(status=status.HTTP_RESPONSE_404)
+            return Response(status=404)
         serializer =  ProductSerializer(obj)
         if request.is_ajax():
             return Response(serializer.data, status=200)
@@ -70,15 +77,10 @@ def set_address_view(request):
 def checkout_view(request):
     user = request.user
     if user.is_authenticated:
-        if request.POST:
-            form = request.POST
-        else:# GET Method
             if (user.addresses.all().exists()):
                 address = request.user.addresses.all().get(current=True)
-                name = address.name
                 context = {
-                    'name' : name,
-                    'address': address,
+                    'address' : address
                 }
             else:
                 messages.warning(request, 'Please set an address first')
@@ -87,3 +89,38 @@ def checkout_view(request):
         messages.warning(request, 'Please login first')
         return redirect('accounts:login')      
     return render(request, 'e_store/checkout.html', context)
+
+
+@api_view(['POST'])
+@parser_classes([JSONParser])
+def placeorder_ajax(request, format=None):
+    user = request.user
+    if request.method == 'POST':
+        print(request.data.get('products'))
+        payment = request.data.get('payment')
+        if payment == None:
+            raise Exception("Sorry, payment variable is None.")
+        address = request.user.addresses.all().get(current=True)
+        data = {
+            'name' : address.name,
+            'mobile' : address.mobile,
+            'transaction_id' : create_transaction_id(),
+            'ship_address' : address.get_complete_address,
+            'payment_type' : pay_choice_converter(payment),
+        }
+        form = OrderForm(data)
+        if form.is_valid():
+            items = request.data.get('products')
+            if items == None:
+                raise Exception("Sorry, items variable is None.")
+            order = form.save(commit=False)
+            order.customer = user
+            order.save()
+            create_orderitems(order, items)
+            obj = Order.objects.get(transaction_id=order.transaction_id)
+            serializer = OrderSerializer(obj)
+            if request.is_ajax():
+                return Response(serializer.data, status=200)
+        else:
+            return Response(form.errors.as_json(), status=500)
+            

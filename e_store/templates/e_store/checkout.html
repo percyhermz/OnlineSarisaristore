@@ -1,7 +1,43 @@
-{% extends 'e_store/base.html' %} {% load crispy_forms_tags %} {%load static %}
+{% extends 'e_store/base.html' %}
+
+{% load crispy_forms_tags %} 
+
+{%load static %}
+
+{% block modal %}
+
+<!-- Modal -->
+<div class="modal fade" id="placeordermodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title " id="exampleModalCenterTitle">Transaction complete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h4 class="text-success text-center font-weight-bold">Thank you for buying to us!</h4>
+        <p class="text-center">You may check all your orders in details at your profile page.
+          Redirecting to home.
+        </p>
+        <p id="transaction_id_ajax"></p>
+        <p id="payment_type_ajax"></p>
+        <p id="name_ajax"></p>
+        <p id="mobile_ajax"></p>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
 {% block content%}
 <div class="text-center">
-  <h2 class="h2 d-block bg-primary">Checkout Details</h2>
+  <h2 class="h2 d-block bg-primary text-light">Checkout Details</h2>
 </div>
 <div class="row col-md-6 col-lg-12">
   <div class="cart-items-div col-md-6 col-12" id="update-panel">
@@ -9,7 +45,7 @@
   </div>
   <div class="col-12 col-md-6">
     {% if address %}
-    <form action="{% url 'store:checkout' %}" method="POST">
+      {% csrf_token %}
       <div class="address-div d-flex justify-content-between">
         <div class="col-6 text-center">
           <span class="text-weight-bold">Address:</span>
@@ -68,20 +104,19 @@
         </div>
         <div class="col-6 text-center">
           <select class="form-control" id="pay-method">
-            <option value="COD">Cash on Delivery</option>
+            <option value="COD" selected >Cash on Delivery</option>
             <option value="PayMaya">Pay via PayMaya</option>
-            <option value="Gcash">Pat via Gcash</option>
-            <option value="bank">Pay via bank</option>
+            <option value="Gcash">Pay via Gcash</option>
+            <option value="Bank">Pay via bank</option>
           </select>
             </div>
       </div>
       <div class="button-divs row text-right">
         <div class="col-12 my-2">
-          <button type="submit" class="place-order btn btn-danger btn-small">Place Order</button>
+          <button class="place-order btn btn-danger btn-small" href="#">Place Order</button>
         </div>
       </div>
       {% endif %}
-    </form>
   </div>
 </div>
 

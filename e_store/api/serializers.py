@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from e_store.models import Product, Images
+from e_store.models import Product, Images, Order
 
 
 
@@ -15,3 +15,9 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['name', 'price', 'code', 'category', 'images']
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['transaction_id', 'payment_type', 'name', 'mobile']
