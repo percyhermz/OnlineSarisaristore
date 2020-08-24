@@ -3,4 +3,112 @@
 
 {% block content %}
 
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-home" aria-selected="true">Profile</a>
+      <a class="nav-item nav-link" id="nav-address-tab" data-toggle="tab" href="#nav-address" role="tab" aria-controls="nav-profile" aria-selected="false">Address</a>
+      <a class="nav-item nav-link" id="nav-orders-tab" data-toggle="tab" href="#nav-orders" role="tab" aria-controls="nav-contact" aria-selected="false">Orders</a>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="row m-0 p-0">
+            <div class="col-12">
+                <div class="row m-0 p-0">
+                    <div class="col-12">
+                        Username: <span class="font-weight-bold">{{user.username}}</span>
+                    </div>
+                    <div class="col-12">
+                        Email:<span class="">{{user.email}}</span>
+                    </div>
+                    <div class="col-12">
+                        Name:<span class="">{{user.first_name}}</span>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+        
+    </div>
+    <div class="tab-pane fade" id="nav-address" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <h4 class="h4 text-weight-bold text-primary">Address</h4>
+        {% if address %}
+            <div class="table-responsive">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Complete Address</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Mobile</th>
+                    <th scope="col">Current</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for i in  address %}
+                  <tr>
+                    <th scope="row">{{ i.get_complete_address}}</th>
+                    <td>{{i.name}}</td>
+                    <td>{{i.mobile}}</td>
+                    <td>
+                        {% if i.current %} 
+                        <span style="color: Dodgerblue;">
+                        <i class="fas fa-check-square"></i>
+                    </span>
+                        {% else %}
+                        <span style="color: Dodgerblue;"></span>
+                        <i class="far fa-square"></i>
+                    </span>
+                        {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        {% else %}
+        <p>No address yet. Please add one by clicking <a class="text-primary" href="{% url 'store:set_address' %}">here</a></p>
+        {% endif %}
+    </div>
+    <div class="tab-pane fade" id="nav-orders" role="tabpanel" aria-labelledby="nav-contact-tab">
+        <h4 class="h4 text-weight-bold text-primary">Address</h4>
+        {% if order %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Date ordered</th>
+                    <th scope="col">Transaction ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Payment Type</th>
+                    <th scope="col">Delivered</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for i in order %}
+                  <tr>
+                    <th scope="row">{{ i.date_ordered}}</th>
+                    <td>{{i.transaction_id}}</td>
+                    <td>{{i.name}}</td>
+                    <td>{{i.payment_type}}</td>
+                    <td>
+                        {% if i.complete %}
+                        <span style="color: Dodgerblue;">
+                        <i class="fas fa-check-square"></i>
+                        </span>
+                        {% else %}
+                        <span style="color: Dodgerblue;">
+                        <i class="far fa-square"></i>
+                        </span>
+                        {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        {% else %}
+        <p>No orders yet. Do some shopping first by clicking <a class="text-primary" href="{% url 'store:store_view' %}">here</a></p>
+        {% endif %}
+    </div>
+  </div>
 {% endblock %}

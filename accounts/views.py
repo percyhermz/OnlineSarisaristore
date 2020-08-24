@@ -58,4 +58,13 @@ def login_account(request):
     
     
 
-
+def profile_view(request):
+    user = request.user
+    if user.is_authenticated:
+        context = {}
+        context['address'] = user.addresses.all()
+        context['order'] = user.order_set.all()
+    else:
+        messages.warning(request, "Please login first")
+        return redirect('accounts:login')
+    return render(request, 'accounts/profile.html', context)

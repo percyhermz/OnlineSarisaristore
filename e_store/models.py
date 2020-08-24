@@ -55,7 +55,7 @@ class Order(models.Model):
     ship_address = models.CharField(max_length=100, verbose_name="Delivered to", default="address") 
     payment_type = models.CharField(max_length=20, choices=PayChoices.choices, default=PayChoices.COD,verbose_name="Payment Method")
     name = models.CharField(max_length=40, verbose_name="Name", default='Name')
-    mobile = models.CharField(max_length=11, verbose_name="Mobile No.", default='09') 
+    mobile = models.CharField(max_length=11, verbose_name="Mobile No.", default='09')
  
 
     def __str__(self):
@@ -81,6 +81,12 @@ class Order(models.Model):
         orderitems = self.orderitem_set.all()
         total = sum([item.quantity for item in orderitems])
         return total
+
+    @property
+    def total_payment(self):
+        orderitems = self.orderitem_set_all()
+        total_pay = sum([item.total_price for item in orderitems])
+        return total_pay
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
