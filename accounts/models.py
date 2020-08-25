@@ -46,12 +46,9 @@ class AccountManager(BaseUserManager):
 
 
 
-
-
-
 class User(AbstractBaseUser):
     email = models.EmailField(verbose_name="email", unique=True, max_length=30)
-    mobile = models.IntegerField(verbose_name="Mobile Number")
+    mobile = models.CharField(max_length=11, verbose_name="Mobile Number")
     username = models.CharField(max_length=30, unique=True)
     first_name = models.CharField(max_length=30, verbose_name="First Name")
     last_name = models.CharField(max_length=30, verbose_name="Last Name")
