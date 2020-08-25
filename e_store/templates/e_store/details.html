@@ -2,40 +2,6 @@
 
 {% load static %}
 
-{% block nav %}
-<header class="mb-2">
-    <nav class="navbar navbar-expand-lg navbar-light bg-primary text-center">
-      <a class="navbar-brand text-light" href="#">Online Sari-sari store</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menunavbar" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      
-    
-      <div class="collapse navbar-collapse text-center" id="menunavbar">
-        <form class="form-inline ml-auto my-2 my-lg-0 input-group input-size-md">
-          <input class="form-control input-size-corner-round" type="search" placeholder="Search">
-          <div class="input-group-append">
-            <button class="btn btn-light text-primary input-size-corner-round" type="submit">Go</button>
-          </div>
-        </form>
-
-        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-          <li class="nav-item">
-            <a class="nav-link menu-link text-light" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link menu-link text-light" href="#">Products</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link menu-link text-light" href="#">Delivery</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-</header>
-
-{% endblock%}
-
 {% block content %}
 {% if product %}
 <div class="product_details row m-0">
@@ -56,11 +22,11 @@
             Category : {{product.category}}
         </div>
         <div class="quantity text-left my-2">
-            <button class="btn btn-primary"> 
+            <button class="btn btn-primary minus" data-product-code="{{product.code}}"> 
               -
             </button>
             <span class="p-3">1</span>
-            <button class="btn btn-primary"> 
+            <button class="btn btn-primary plus" data-product-code="{{product.code}}"> 
               +
             </button>
             </div>

@@ -13,12 +13,12 @@
       
         
       <div class="collapse navbar-collapse text-center" id="menunavbar">
-        
-        <form class="form-inline ml-auto my-2 my-lg-0 input-group input-size-md d-none d-md-flex">
-          <input class="form-control input-corners" type="search" placeholder="Search">
+        <form class="form-inline ml-auto my-2 my-lg-0 input-group autocomplete-parent input-size-md d-none d-md-flex" method="GET" action="{% url 'store:store_view' %}">
+          <input class="form-control search-bar" name="name" type="search" placeholder="Search" >
           <div class="input-group-append">
-            <button class="btn btn-light text-primary  btn-corners" type="submit">Go</button>
+            <button class="btn btn-light text-primary " type="submit"><i class="fas fa-search"></i></button>
           </div>
+          <div class='autocomplete-items'></div>
         </form>
       <a class="openbtn my-sm-0 my-2 ml-2 d-none d-md-block" href="">
         <img class="cart-icon" src="{% static 'e_store/img/cart.png' %}"> 
@@ -48,16 +48,8 @@
           </li>
           {% endif%}
         </ul>
-        
-        
-          
-        
-        
       </div>
-      
-      
     </nav>
-
     <h1 class="jumbotron text-center">
         Online Shop
     </h1>
@@ -79,11 +71,14 @@
       <button class="btn btn-primary btn-block mobile-add-btn d-md-none" >
         <i class="fa fa-shopping-cart" style="font-size:48px;color:white"></i><span class="cart-total"></span>
       </button>
-      <form class="form-inline ml-auto my-2 my-lg-0 input-group input-size-md  d-md-none">
-        <input class="form-control border-primary input-corners" type="search" placeholder="Search">
+      <form class="form-inline ml-auto my-2 my-lg-0 input-group input-size-md  d-md-none autocomplete-parent" action="" method="GET">
+        
+        <input class="form-control border-primary  search-bar"  type="search" placeholder="Search">
         <div class="input-group-append">
-          <button class="btn btn-primary btn-corners" type="submit">Go</button>
+          <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i>
+          </button>
         </div>
+        <div class='autocomplete-items'></div>
       </form>
         <div class="collapse-control">
         <h5 class="text-left">
@@ -92,7 +87,6 @@
         </a>
         </h5>
         </div>
-        
         
         <div class="collapse text-left " id="categories">
             <h4>
@@ -196,8 +190,8 @@
       </div>
       
         
-    <div class="d-flex justify-content-between">
-      <a class="d-block text-center btn btn-small btn-primary text-light" role="button">View Cart</a>
+    <div class="d-flex text-right">
+      <!-- <a class="d-block text-center btn btn-small btn-primary text-light" role="button">View Cart</a> -->
       <a class="d-block btn btn-primary btn-small text-center text-light"  href="{% url 'store:checkout' %}" role="button">Checkout</a>
     </div>
   </div>

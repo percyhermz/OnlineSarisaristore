@@ -11,5 +11,6 @@ urlpatterns = [
     path('add_to_cart/', views.cart_ajax_handler, name="ajax_add_to_cart"),
     path('set_address/', views.set_address_view, name="set_address"),
     path('checkout/', views.checkout_view, name="checkout"),
-    path('checkout/placeorder/', views.placeorder_ajax, name='ajax_placeorder')
+    path('checkout/placeorder/', views.placeorder_ajax, name='ajax_placeorder'),
+    path('autocomplete/', views.autocomplete_ajax, name='autocomplete_ajax')
 ]

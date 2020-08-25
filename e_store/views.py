@@ -12,11 +12,15 @@ from django.contrib import messages
 from e_store.utils import pay_choice_converter, create_orderitems, create_transaction_id
 # Create your views here.
 
+
 def store_view(request):
     success = messages.get_messages(request)
-    obj = Product.objects.all()
+    search = request.GET.get('name')
+    if search != None:
+        obj = Product.objects.filter(name__icontains=search)
+    else:
+        obj = Product.objects.all()
     context = {
-        'multiplier' : range(12),
         'obj' : obj,
         'messages': success
     }
@@ -96,7 +100,6 @@ def checkout_view(request):
 def placeorder_ajax(request, format=None):
     user = request.user
     if request.method == 'POST':
-        print(request.data.get('products'))
         payment = request.data.get('payment')
         if payment == None:
             raise Exception("Sorry, payment variable is None.")
@@ -124,3 +127,22 @@ def placeorder_ajax(request, format=None):
         else:
             return Response(form.errors.as_json(), status=500)
             
+
+
+@api_view(['GET'])
+@parser_classes([JSONParser])
+def autocomplete_ajax(request):
+    if request.method == 'GET':
+        input = request.query_params.get('input')
+        if input == None:
+            raise Exception("input is None")
+        print(input)
+        try:
+            obj = Product.objects.filter(name__icontains=input)[:5]
+        except Product.DoesNotExist:
+            return Response(status=404)
+        serializer = ProductSerializer(obj, many=True)
+        if request.is_ajax():
+            return Response(serializer.data, status=200)
+    else:
+        return Response(status=405)

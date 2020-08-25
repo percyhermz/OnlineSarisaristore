@@ -1,7 +1,17 @@
 $(document).ready(function(){
 //    alert('This is to check if js is working');
    var x = window.matchMedia("(max-width: 700px)");
-
+    function delay(callback, ms) {
+        var timer = 0;
+        return function() {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            callback.apply(context, args);
+        }, ms || 0);
+        };
+    }
+  
     onLoadCartIn();
     button_events_load();
     function getValue() {
@@ -47,7 +57,6 @@ $(document).ready(function(){
             '-ms-transform': 'translateX(100%)'
         });      
     });
-
 
 }
 
@@ -147,7 +156,27 @@ $(document).ready(function(){
                         console.log(response);
                     }
                 });
-    });
+        });
+
+        $('.search-bar').on('keyup', delay(function(e){
+                let input = e.currentTarget.value
+                console.log(input);
+                $.ajax({
+                url: 'autocomplete/',
+                method: 'GET',
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                data: 
+                {input : input},
+                success: function(response){
+                    console.log(response);
+                    autocomplete_list(response);
+                },
+                error: function(response){
+                    console.log(response);
+                }
+            });
+        }, 500));
         
     function onLoadCartIn() {
         let basket_start = JSON.parse(localStorage.getItem('basket'));
@@ -274,8 +303,21 @@ $(document).ready(function(){
         }
         return cookieValue;
     }
+
     
-    
+    function autocomplete_list(items) {
+        $('.autocomplete-items').empty();
+        for (const i in items) {
+            to_append = "<div class='d-block text-left'><a class='autocomplete-click text-dark text-left' href='#'><img class='autocomplete-image' src='"+items[i].images[0].image+"'> <span class='auto-text'>"+items[i].name+"</span> </a></div>";
+            $('.autocomplete-items').append(to_append);
+        }
+        $('.autocomplete-click').on('click', function(e){
+            e.preventDefault;
+            $('.search-bar').val($(e.target).text());
+            $('.autocomplete-items').css('display', 'none');
+        });
+        $('.autocomplete-items').css('display', 'block');
+    }
 });
 
 

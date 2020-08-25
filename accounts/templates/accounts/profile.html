@@ -41,6 +41,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Mobile</th>
                     <th scope="col">Current</th>
+                    <th scope="col">Edit</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -49,22 +50,25 @@
                     <th scope="row">{{ i.get_complete_address}}</th>
                     <td>{{i.name}}</td>
                     <td>{{i.mobile}}</td>
-                    <td>
+                    <td class="text-center">
                         {% if i.current %} 
                         <span style="color: Dodgerblue;">
                         <i class="fas fa-check-square"></i>
                     </span>
                         {% else %}
-                        <span style="color: Dodgerblue;"></span>
+                        <span style="color: Dodgerblue;">
                         <i class="far fa-square"></i>
                     </span>
                         {% endif %}
                     </td>
+                    <td><a href="#">Edit</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
               </table>
             </div>
+          <a href="#" class="text-primary"><p>Add another address <span style="color: green;"><i class="fas fa-plus"></i></span>
+          </p></a>
         {% else %}
         <p>No address yet. Please add one by clicking <a class="text-primary" href="{% url 'store:set_address' %}">here</a></p>
         {% endif %}
@@ -81,6 +85,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Payment Type</th>
                     <th scope="col">Delivered</th>
+                    <th scope="col">Details</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -90,7 +95,7 @@
                     <td>{{i.transaction_id}}</td>
                     <td>{{i.name}}</td>
                     <td>{{i.payment_type}}</td>
-                    <td>
+                    <td class="text-center">
                         {% if i.complete %}
                         <span style="color: Dodgerblue;">
                         <i class="fas fa-check-square"></i>
@@ -101,11 +106,15 @@
                         </span>
                         {% endif %}
                     </td>
+                    <td><a href="#">Details</a></td>
                   </tr>
                   {% endfor %}
+                  
                 </tbody>
               </table>
             </div>
+            <a href="#" class="text-primary"><p>Make an order by shopping here <span style="color: green;"><i class="fas fa-plus"></i></span>
+            </p></a>
         {% else %}
         <p>No orders yet. Do some shopping first by clicking <a class="text-primary" href="{% url 'store:store_view' %}">here</a></p>
         {% endif %}
